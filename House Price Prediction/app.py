@@ -8,26 +8,31 @@ import urllib.request
 # Load the trained model and scaler
 # model = joblib.load('house_price_model.pkl')  # Replace with the actual path to your model
 
-# Helper function to download model from GitHub
+# Helper function to download the model
 def download_model(url, model_path):
+    """Download the model if it doesn't already exist."""
     if not os.path.exists(model_path):
         with st.spinner("Downloading model..."):
             urllib.request.urlretrieve(url, model_path)
         st.success("Model downloaded successfully!")
 
-# Define the GitHub URL for the model
+# Define the GitHub URL and local path for the model
 MODEL_URL = "https://github.com/OTDavid9/DATA-SCIENCE---HANDS-ON-PROJECT/raw/main/House%20Price%20Prediction/house_price_model.pkl"
-MODEL_PATH = "house_price_model.pkl"
+MODEL_PATH = "house_price_model.pkl"  # Save to the current working directory
 
-# Ensure the model is downloaded
-download_model(MODEL_URL, MODEL_PATH)
-
-# Load the trained model
+# Download and load the model
 try:
-    model = joblib.load(MODEL_PATH)
-    st.success("Model loaded successfully!")
+    download_model(MODEL_URL, MODEL_PATH)
+    
+    # Load the model using joblib
+    if os.path.exists(MODEL_PATH):
+        model = joblib.load(MODEL_PATH)
+        st.success("Model loaded successfully!")
+    else:
+        st.error("Model file not found after download.")
+        st.stop()
 except Exception as e:
-    st.error("Error loading the model. Please check the file path or format.")
+    st.error(f"Error downloading or loading the model: {e}")
     st.stop()
 # Streamlit App
 st.title("🏠 House Price Prediction App")
