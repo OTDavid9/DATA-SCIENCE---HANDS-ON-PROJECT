@@ -1,6 +1,6 @@
 import streamlit as st
-import numpy as np
-import pickle
+# import numpy as np
+
 
 # Streamlit App
 st.title("🏠 House Price Prediction App")
@@ -21,14 +21,14 @@ garage = st.selectbox("Garage:", ["Yes", "No"])  # Categorical
 location_mapping = {"Urban": 2, "Suburban": 1, "Rural": 0}
 garage_mapping = {"Yes": 1, "No": 0}
 
-# Prepare data for prediction
-features = np.array([
-    area, 
-    bedrooms, 
-    bathrooms, 
-    location_mapping[location], 
-    garage_mapping[garage]
-]).reshape(1, -1)
+# # Prepare data for prediction
+# features = np.array([
+#     area, 
+#     bedrooms, 
+#     bathrooms, 
+#     location_mapping[location], 
+#     garage_mapping[garage]
+# ]).reshape(1, -1)
 
 # Predict button
 if st.button("Predict"):
