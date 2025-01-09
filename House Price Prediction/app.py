@@ -1,47 +1,51 @@
 import streamlit as st
-# import numpy as np
+import numpy as np
+import pandas as pd
+import joblib
+
+# Load the trained model and scaler
+model = joblib.load('house_price_model.pkl')  # Replace with the actual path to your model
 
 
 # Streamlit App
 st.title("🏠 House Price Prediction App")
 
 st.write("""
-This app demonstrates house price prediction based on input features.
-Type in the details below to see the predicted price!
+This app demonstrates house price prediction based on input features.  
+Enter the details below to see the predicted price!
 """)
 
 # User inputs
-area = st.number_input("Area (sq ft):", min_value=500, max_value=5000, step=1, value=1000, format="%d")  # Integer
-bedrooms = st.number_input("Number of Bedrooms:", min_value=1, max_value=10, step=1, value=3, format="%d")  # Integer
-bathrooms = st.number_input("Number of Bathrooms:", min_value=1.0, max_value=5.0, step=0.1, value=2.0)  # Float
-location = st.selectbox("Location:", ["Urban", "Suburban", "Rural"])  # Categorical
-garage = st.selectbox("Garage:", ["Yes", "No"])  # Categorical
+area = st.number_input("Area (sq ft):", min_value=250, max_value=5000, step=1, value=250, format="%d")  # Integer
+bedrooms = st.number_input("Number of Bedrooms:", min_value=1, max_value=50,step=1, value=1,format="%d")  # Integer
+bathrooms = st.number_input("Number of Bathrooms:", min_value=1, max_value=20, value=1, format="%d")  # Integer
+house_age = st.number_input("House Age:", min_value=0, max_value=100, step=1, value=0, format="%d")  # Integer
+lot_size = st.number_input("Lot Size (acres):", min_value=0.0, max_value=10.0, step=0.1, value=0.5)  # Float
+garage = st.selectbox("Garage Size (Number of Cars):", [0, 1, 2, 3, 4])  # Integer
+neighborhood_quality = st.slider("Neighborhood Quality (1-10):", min_value=1, max_value=10, value=0)  # Integer
 
-# Encode categorical variables
-location_mapping = {"Urban": 2, "Suburban": 1, "Rural": 0}
-garage_mapping = {"Yes": 1, "No": 0}
+# Prepare data for prediction
 
-# # Prepare data for prediction
-# features = np.array([
-#     area, 
-#     bedrooms, 
-#     bathrooms, 
-#     location_mapping[location], 
-#     garage_mapping[garage]
-# ]).reshape(1, -1)
+new_data = pd.DataFrame({
+    'Square_Footage': [area],
+    'Num_Bedrooms': [bedrooms],
+    'Num_Bathrooms': [bathrooms],
+    'House_Age': [house_age],
+    'Lot_Size': [lot_size],
+    'Garage_Size': [garage],
+    'Neighborhood_Quality': [neighborhood_quality]
+})
 
 # Predict button
 if st.button("Predict"):
-    # Use a placeholder prediction formula (replace with your model)
-    price = (
-        area * 0.5 + 
-        bedrooms * 200 + 
-        bathrooms * 0.3 + 
-        location_mapping[location] * 0.7 + 
-        garage_mapping[garage] * 1000 + 
-        5000
-    )
-    st.success(f"Predicted House Price: ${price:,.2f}")
+    # Make a prediction
+    predicted_price = model.predict(new_data)  # Predicting using the trained model
+    
+    # Convert NumPy array to a native Python float
+    predicted_price = predicted_price[0]  # Extract the first element if it's a single prediction
+    
+    st.success(f"Predicted House Price: ${predicted_price:,.2f}")
+    print(f"Predicted House Price: ${predicted_price:,.2f}")
 
 st.write("""
 ---  
