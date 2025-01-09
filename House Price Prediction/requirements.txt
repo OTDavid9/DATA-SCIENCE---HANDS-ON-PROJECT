@@ -1,4 +1,4 @@
 streamlit
-joblib=="1.2.0"
-pandas=="2.1.4"
+joblib
+pandasS
 # numpy="1.26.4"
