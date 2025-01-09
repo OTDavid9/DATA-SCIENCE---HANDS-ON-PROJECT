@@ -2,11 +2,33 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import joblib
+import os
+import urllib.request
 
 # Load the trained model and scaler
-model = joblib.load('house_price_model.pkl')  # Replace with the actual path to your model
+# model = joblib.load('house_price_model.pkl')  # Replace with the actual path to your model
 
+# Helper function to download model from GitHub
+def download_model(url, model_path):
+    if not os.path.exists(model_path):
+        with st.spinner("Downloading model..."):
+            urllib.request.urlretrieve(url, model_path)
+        st.success("Model downloaded successfully!")
 
+# Define the GitHub URL for the model
+MODEL_URL = "https://github.com/OTDavid9/DATA-SCIENCE---HANDS-ON-PROJECT/raw/main"  # Replace with actual URL
+MODEL_PATH = "House Price Prediction/house_price_model.pkl"
+
+# Ensure the model is downloaded
+download_model(MODEL_URL, MODEL_PATH)
+
+# Load the trained model
+try:
+    model = joblib.load(MODEL_PATH)
+    st.success("Model loaded successfully!")
+except Exception as e:
+    st.error("Error loading the model. Please check the file path or format.")
+    st.stop()
 # Streamlit App
 st.title("🏠 House Price Prediction App")
 
