@@ -16,8 +16,8 @@ def download_model(url, model_path):
         st.success("Model downloaded successfully!")
 
 # Define the GitHub URL for the model
-MODEL_URL = "https://github.com/OTDavid9/DATA-SCIENCE---HANDS-ON-PROJECT/raw/main"  # Replace with actual URL
-MODEL_PATH = "House Price Prediction/house_price_model.pkl"
+MODEL_URL = "https://github.com/OTDavid9/DATA-SCIENCE---HANDS-ON-PROJECT/raw/main/House%20Price%20Prediction/house_price_model.pkl"
+MODEL_PATH = "house_price_model.pkl"
 
 # Ensure the model is downloaded
 download_model(MODEL_URL, MODEL_PATH)
